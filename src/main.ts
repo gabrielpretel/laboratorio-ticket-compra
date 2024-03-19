@@ -60,27 +60,22 @@ export interface ResultadoLineaTicket {
   precioConIva: number;
 }
 
-interface ResultadoTotalTicket {
+export interface ResultadoTotalTicket {
   totalSinIva: number;
   totalConIva: number;
   totalIva: number;
 }
 
-interface TotalPorTipoIva {
+export interface TotalPorTipoIva {
   tipoIva: TipoIva;
   cuantia: number;
 }
 
-interface TicketFinal {
+export interface TicketFinal {
   lineas: ResultadoLineaTicket[];
   total: ResultadoTotalTicket;
   desgloseIva: TotalPorTipoIva[];
 }
-
-// const calculaTicket = (lineasTicket: LineaTicket[]) => {
-//   // 1.Calculamos la cantidad de un producto
-//   lineasTicket.reduce((acc: number, linea: LineaTicket) => {});
-// };
 
 // calculamos todas las líneas del ticket
 
@@ -124,23 +119,50 @@ export const calcularPrecioConIva = (precio: number, iva: TipoIva): number => {
 console.log(calculaLineaTicket(productos));
 
 const calculaTotalIva = (lineas: ResultadoLineaTicket[]): TotalPorTipoIva[] => {
-  return lineas.reduce((acumulador, linea) => {
-    // Encuentra el índice del tipo de IVA actual en el acumulador
+  return lineas.reduce<TotalPorTipoIva[]>((acumulador, linea) => {
     const indice = acumulador.findIndex(
       (item) => item.tipoIva === linea.tipoIva
     );
     if (indice === -1) {
-      // Si no existe, lo añade al acumulador
       acumulador.push({
         tipoIva: linea.tipoIva,
         cuantia: linea.precioConIva,
       });
     } else {
-      // Si ya existe, suma la cuantía
       acumulador[indice].cuantia += linea.precioConIva;
     }
     return acumulador;
-  }, [] as TotalPorTipoIva[]);
+  }, []);
 };
 
 console.log(calculaTotalIva(calculaLineaTicket(productos)));
+
+export const calculaTotalTicket = (
+  lineas: ResultadoLineaTicket[]
+): TicketFinal => {
+  let totalSinIva = 0;
+  let totalConIva = 0;
+
+  lineas.forEach((linea) => {
+    totalSinIva += linea.precioSinIva;
+    totalConIva += linea.precioConIva;
+  });
+
+  const desgloseIva = calculaTotalIva(lineas);
+
+  const totalIva = totalConIva - totalSinIva;
+
+  const resultadoTotalTicket: TicketFinal = {
+    lineas: lineas,
+    total: {
+      totalSinIva: totalSinIva,
+      totalConIva: totalConIva,
+      totalIva: totalIva,
+    },
+    desgloseIva: desgloseIva,
+  };
+
+  return resultadoTotalTicket;
+};
+
+console.log(calculaTotalTicket(calculaLineaTicket(productos)));

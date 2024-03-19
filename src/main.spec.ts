@@ -4,6 +4,8 @@ import {
   ResultadoLineaTicket,
   calcularPrecioConIva,
   TipoIva,
+  TicketFinal,
+  calculaTotalTicket,
 } from "./main";
 
 describe("calculaLineaTicket", () => {
@@ -162,5 +164,51 @@ describe("calcularPrecioConIva", () => {
 
     //Assert
     expect(resultado).toBe(resultadoEsperado);
+  });
+});
+
+describe("calculaTotalTicket", () => {
+  it("Debería calcular correctamente los totales y el desglose de IVA para el ticket", () => {
+    // Arrange
+    const lineasDeTicket: LineaTicket[] = [
+      {
+        producto: {
+          nombre: "Libro de TypeScript",
+          precio: 30,
+          tipoIva: "general",
+        },
+        cantidad: 2,
+      },
+      {
+        producto: {
+          nombre: "Cuaderno",
+          precio: 3,
+          tipoIva: "reducido",
+        },
+        cantidad: 3,
+      },
+    ];
+
+    const resultadoLineasTicket: ResultadoLineaTicket[] =
+      calculaLineaTicket(lineasDeTicket);
+
+    const resultadoEsperado: TicketFinal = {
+      lineas: resultadoLineasTicket,
+      total: {
+        totalSinIva: 69, // 30 * 2 + 3 * 3
+        totalConIva: 82.5, // (30 * 2 * 1.21) + (3 * 3 * 1.1)
+        totalIva: 13.5, // totalConIva - totalSinIva
+      },
+      desgloseIva: [
+        { tipoIva: "general", cuantia: 72.6 }, // 30 * 2 * 1.21
+        { tipoIva: "reducido", cuantia: 9.9 }, // 3 * 3 * 1.1
+      ],
+    };
+
+    // Act
+    const resultado = calculaTotalTicket(resultadoLineasTicket);
+
+    // Assert
+    expect(resultado).toStrictEqual(resultadoEsperado);
   });
 });
