@@ -195,13 +195,13 @@ describe("calculaTotalTicket", () => {
     const resultadoEsperado: TicketFinal = {
       lineas: resultadoLineasTicket,
       total: {
-        totalSinIva: 69, // 30 * 2 + 3 * 3
-        totalConIva: 82.5, // (30 * 2 * 1.21) + (3 * 3 * 1.1)
-        totalIva: 13.5, // totalConIva - totalSinIva
+        totalSinIva: 69,
+        totalConIva: 82.5,
+        totalIva: 13.5,
       },
       desgloseIva: [
-        { tipoIva: "general", cuantia: 72.6 }, // 30 * 2 * 1.21
-        { tipoIva: "reducido", cuantia: 9.9 }, // 3 * 3 * 1.1
+        { tipoIva: "general", cuantia: 72.6 },
+        { tipoIva: "reducido", cuantia: 9.9 },
       ],
     };
 

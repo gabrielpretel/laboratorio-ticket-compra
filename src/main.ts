@@ -155,9 +155,9 @@ export const calculaTotalTicket = (
   const resultadoTotalTicket: TicketFinal = {
     lineas: lineas,
     total: {
-      totalSinIva: totalSinIva,
-      totalConIva: totalConIva,
-      totalIva: totalIva,
+      totalSinIva: Number(totalSinIva.toFixed(2)),
+      totalConIva: Number(totalConIva.toFixed(2)),
+      totalIva: Number(totalIva.toFixed(2)),
     },
     desgloseIva: desgloseIva,
   };
@@ -165,4 +165,7 @@ export const calculaTotalTicket = (
   return resultadoTotalTicket;
 };
 
-console.log(calculaTotalTicket(calculaLineaTicket(productos)));
+console.log(
+  "Ticket completo:",
+  calculaTotalTicket(calculaLineaTicket(productos))
+);
