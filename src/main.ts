@@ -94,7 +94,7 @@ export const calculaLineaTicket = (
       precioSinIva: precioSinIva,
       tipoIva: tipoIva,
       precioConIva: precioConIva,
-    };
+    }; 
   });
   return resultadoLineasTicket;
 };
@@ -116,8 +116,6 @@ export const calcularPrecioConIva = (precio: number, iva: TipoIva): number => {
   }
 };
 
-console.log(calculaLineaTicket(productos));
-
 const calculaTotalIva = (lineas: ResultadoLineaTicket[]): TotalPorTipoIva[] => {
   return lineas.reduce<TotalPorTipoIva[]>((acumulador, linea) => {
     const indice = acumulador.findIndex(
@@ -134,8 +132,6 @@ const calculaTotalIva = (lineas: ResultadoLineaTicket[]): TotalPorTipoIva[] => {
     return acumulador;
   }, []);
 };
-
-console.log(calculaTotalIva(calculaLineaTicket(productos)));
 
 export const calculaTotalTicket = (
   lineas: ResultadoLineaTicket[]
